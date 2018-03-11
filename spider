@@ -1,0 +1,39 @@
+#coding=utf-8
+#今日头条
+import urllib2
+import requests
+import json
+
+def get_url():
+    url = 'https://www.toutiao.com/api/pc/feed/?category=news_finance&utm_source=toutiao&widen=1&max_behot_time=0&max_behot_time_tmp=0&tadrequire=true&as=A1652AFA85A2160&cp=5AA5523156401E1&_signature=K-rDtwAAcVaGAJ02nJ1BYCvqw6'
+    global count
+    try:
+        headers={
+            'Host': 'www.toutiao.com',
+            'accept': 'text/javascript, text/html,application/xml,text/xml,*/*',
+            'accept-encoding': 'gzip,deflate,br',
+            'User-Agent': 'Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 6.1; 125LA; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022)',
+            'Connection': 'Keep-Alive',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept-Language': 'zh-cn',
+            'cookie':'ga=GA1.2.1020650197.1520446957; tt_webid=6530269973758330376; tt_webid=6530269973758330376; WEATHER_CITY=%E5%8C%97%E4%BA%AC'
+        }
+        response = requests.get(url,headers = headers)
+        print response.text
+        Jdata = json.loads(response.text)
+        # print Jdata
+        news = Jdata['data']
+
+        for n in news:
+            title = n['title']
+            source = n['source']
+            groupID = n['group_id']
+            abstract = n['abstract']
+            print title, '|', source, '|', groupID, '|', abstract
+
+    except urllib2.URLError, e:
+        print e.reason
+
+if __name__ == '__main__':
+    count = 0
+    get_url()
